@@ -28,7 +28,7 @@ const fetch = async (...args: Parameters<typeof import('node-fetch')['default']>
 };
 
 const CLIENT_ID = "32236f358755f224b330";
-const CLIENT_SECRET = "6253207e22747f0e00eff069a0f14a082ad2b915 ";
+const CLIENT_SECRET = " ";
 
 app.use(cors());
 app.use(bodyParser.json());
