@@ -1,20 +1,76 @@
 import express, { Express, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+
+// import { PrismaClient } from '@prisma/client';
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
-app.use('/api/v1/ping', (req: Request, res: Response) => {
-  return res.status(200).json({ success: true, msg: 'Pong' });
+// app.use('/api/v1/ping', (req: Request, res: Response) => {
+//   return res.status(200).json({ success: true, msg: 'Pong' });
+// });
+
+// app.use('/api/v1/challenge', async (req: Request, res: Response) => {
+//   const challenge = await prisma.challenge.findMany({});
+//   return res.status(200).json({ success: true, data: challenge });
+// });
+
+// app.listen(port, async () => {
+//   await prisma.$connect();
+//   console.log(`[*] Server Running on Port ${port}`);
+// });
+
+const fetch = async (...args: Parameters<typeof import('node-fetch')['default']>) => {
+  const { default: fetch } = await import('node-fetch');
+  return fetch(...args);
+};
+
+const CLIENT_ID = "32236f358755f224b330";
+const CLIENT_SECRET = "6253207e22747f0e00eff069a0f14a082ad2b915 ";
+
+app.use(cors());
+app.use(bodyParser.json());
+
+app.get('getAccessToken', async (req, res) => {
+
+  req.query.code;
+
+  const param = '?client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET + '&code=' + req.query.code;
+
+  await fetch('http://github.com/login/oauth/access_token' + param, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+    .then((response) => { return response.json() })
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 });
 
-app.use('/api/v1/challenge', async (req: Request, res: Response) => {
-  const challenge = await prisma.challenge.findMany({});
-  return res.status(200).json({ success: true, data: challenge });
+app.get('/getUserData', async (req, res) => {
+  req.get('Authorization');
+  await fetch('https://api.github.com/user', {
+    method: 'GET',
+    headers: {
+      'Authorization': req.get('Authorization'),
+    }
+  })
+    .then((response) => { return response.json() })
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 });
 
-app.listen(port, async () => {
-  await prisma.$connect();
-  console.log(`[*] Server Running on Port ${port}`);
-});
+app.listen(port, () => {
+  console.log("server started");
+})
