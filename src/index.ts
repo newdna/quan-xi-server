@@ -27,13 +27,13 @@ const fetch = async (...args: Parameters<typeof import('node-fetch')['default']>
   return fetch(...args);
 };
 
-const CLIENT_ID = "32236f358755f224b330";
-const CLIENT_SECRET = " ";
+const CLIENT_ID = process.env.CLIENT_ID || "";
+const CLIENT_SECRET = process.env.CLIENT_SECRET || "";
 
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('getAccessToken', async (req, res) => {
+app.get('/getAccessToken', async (req, res) => {
 
   req.query.code;
 
