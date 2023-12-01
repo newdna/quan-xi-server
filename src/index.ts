@@ -1,16 +1,17 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-
+import dotenv from 'dotenv';
 // import { PrismaClient } from '@prisma/client';
 
+dotenv.config();
 const app: Express = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 // const prisma = new PrismaClient();
 
-// app.use('/api/v1/ping', (req: Request, res: Response) => {
-//   return res.status(200).json({ success: true, msg: 'Pong' });
-// });
+app.use('/api/v1/ping', (req: Request, res: Response) => {
+  return res.status(200).json({ success: true, msg: 'Pong' });
+});
 
 // app.use('/api/v1/challenge', async (req: Request, res: Response) => {
 //   const challenge = await prisma.challenge.findMany({});
@@ -38,7 +39,7 @@ app.get('/getAccessToken', async (req, res) => {
   req.query.code;
 
   const param = '?client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET + '&code=' + req.query.code;
-
+  console.log(param)
   await fetch('http://github.com/login/oauth/access_token' + param, {
     method: 'POST',
     headers: {
@@ -62,8 +63,11 @@ app.get('/getUserData', async (req, res) => {
       'Authorization': req.get('Authorization'),
     }
   })
-    .then((response) => { return response.json() })
+    .then((response) => { 
+      console.log(response)
+      return response.json() })
     .then((data) => {
+      console.log("DATA: ", data)
       res.json(data);
     })
     .catch((error) => {
