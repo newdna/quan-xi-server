@@ -31,6 +31,11 @@ const REPO_PERSONAL_TOKEN = process.env.REPO_PERSONAL_TOKEN || "";
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/getChallenges', async (req, res) => {
+  const challenges = await prisma.challenge.findMany(); // In production, don't forget to use pagination (https://www.prisma.io/docs/concepts/components/prisma-client/pagination)
+  res.status(200).json(challenges);
+});
+
 app.post('/newBranch', async (req, res) => {
   const githubLink: string = req.body.githubLink;
   const githubId: string = req.body.githubId;
