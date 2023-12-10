@@ -36,6 +36,16 @@ app.get('/getChallenges', async (req, res) => {
   res.status(200).json(challenges);
 });
 
+app.get('/getChallenge/:id', async (req, res) => {
+  const id = String(req.params.id);
+  const challenge = await prisma.challenge.findUnique({
+    where: {
+      id: id
+    }
+  });
+  res.status(200).json(challenge);
+});
+
 app.post('/newBranch', async (req, res) => {
   const githubLink: string = req.body.githubLink;
   const githubId: string = req.body.githubId;
